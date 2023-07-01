@@ -1,0 +1,62 @@
+.header {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    height: 70vh;
+    background-image: linear-gradient(
+        to right bottom,
+        rgba(0, 0, 0, 0.501),
+        rgba(8, 8, 8, 0.501)
+    ), url("../../public/3236267.jpg");
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: grid;
+    place-items: center;
+}
+
+.header div {
+    width: 20ch;
+    color: #fff;
+    animation: type 2s steps(20), blink 0.5s step-end infinite alternate;
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 3px solid;
+    font-size: 7rem;
+    text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+    .header div {
+        font-size: 5rem;
+    }
+}
+
+@media screen and (max-width: 425px) {
+    .header {
+        height: 60vh;
+    }
+
+    .header div {
+        font-size: 3.5rem;
+        width: 19ch;
+        animation: type 2s steps(19), blink 0.5s step-end infinite alternate;
+    }
+}
+
+@media screen and (max-width: 375px) {
+    .header div {
+        font-size: 2.5rem;
+    }
+}
+
+@keyframes type {
+    from {
+        width: 0;
+    }
+}
+
+@keyframes blink {
+    50% {
+        border-color: transparent;
+    }
+}

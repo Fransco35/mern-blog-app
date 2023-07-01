@@ -1,0 +1,338 @@
+.nav {
+    width: 100%;
+    height: 65px;
+    position: relative;
+    line-height: 65px;
+    text-align: center;
+    z-index: 10;
+    display: flex;
+    border-bottom: 1px solid rgba(41, 41, 41, 1);
+    background-color: #fff;
+}
+
+ .navLogo{ 
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+    margin-right: 2rem;
+    padding-left: 2rem;
+    font-size: 3rem;
+} 
+
+
+
+.navList {
+    font-size: 1.6rem;
+    height: 65px;
+    float: left;
+    margin-left: 80px;
+}
+
+.ul {
+    width: 100%;
+    height: 65px;
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0 1rem;
+}
+
+.navLink:hover {
+    transform: translateY(-5px);
+    transition: all 0.3s;
+}
+
+.li {
+    width: auto;
+    height: 65px;
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding-right: 2.5rem;
+} 
+
+/* will edit soon */
+.form {
+    flex: 0 0 25%;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    padding-left: 1rem;
+    margin-right: auto;
+}
+
+.input {
+    font-family: inherit;
+    font-size: 1.5rem;
+    color: inherit;
+    background-color: #f4f2f2;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 10rem;
+    width: auto;
+    transition: all 0.2;
+    margin-right: -3.25rem;
+}
+
+.input:focus {
+    background-color: #f0eeee;
+    outline: none;
+    border: 1px solid rgba(41, 41, 41, 1);
+}
+
+.input:focus + button {
+    background-color: #eee;
+}
+
+.button {
+    border: none;
+    background-color: #f4f2f4;
+}
+
+.button:focus {
+    outline: none;
+}
+
+.button:active {
+    transform: translateY(2px);
+}
+
+.span {
+    cursor: pointer;
+    width: 30px;
+    height: 25px;
+    margin: auto;
+    margin-left: 10px;
+    position: absolute;
+    right: 30px;
+    top: 0;
+    bottom: 0;
+    display: none;
+  }
+  
+  @media screen and(max-width: 1000px) {
+    .span {
+      display: block;
+    }
+  }
+  
+  @media screen and(max-width: 360px) {
+    .span {
+      width: 25px;
+      margin-left: 5px;
+    }
+  }
+  
+  .navTrigger {
+    display: none;
+    cursor: pointer;
+    width: 30px;
+    height: 25px;
+    margin: auto;
+    margin-left: 10px;
+    position: absolute;
+    right: 30px;
+  }
+  
+  .navTrigger i {
+    background-color: #000;
+    border-radius: 2px;
+    content: "";
+    display: block;
+    width: 100%;
+    height: 4px;
+  }
+  
+  .navTrigger i:nth-child(1) {
+    animation: outT 0.8s backwards;
+    animation-direction: reverse;
+  }
+  
+  .navTrigger i:nth-child(2) {
+    margin: 5px 0;
+    animation: outM 0.8s backwards;
+    animation-direction: reverse;
+  }
+  
+  .navTrigger i:nth-child(3) {
+    animation: outBtm 0.8s backwards;
+    animation-direction: reverse;
+  }
+  
+  .navTrigger:active i:nth-child(1) {
+    animation: inT 0.8s forwards;
+  }
+  
+  .navTrigger:active i:nth-child(2) {
+    animation: inM 0.8s forwards;
+  }
+  
+  .navTrigger:active i:nth-child(3) {
+    animation: inBtm 0.8s forwards;
+  }
+  
+  @keyframes inM {
+    50% {
+      transform: rotate(0);
+    }
+    100% {
+      transform: rotate(45deg);
+    }
+  }
+  
+  @keyframes outM {
+    50% {
+      transform: rotate(0);
+    }
+    100% {
+      transform: rotate(45deg);
+    }
+  }
+  
+  @keyframes inT {
+    0% {
+      transform: translateY(0) rotate(0);
+    }
+    50% {
+      transform: translateY(9px) rotate(0);
+    }
+    100% {
+      transform: translateY(9px) rotate(135deg);
+    }
+  }
+  
+  @keyframes outT {
+    0% {
+      transform: translateY(0) rotate(0);
+    }
+    50% {
+      transform: translateY(9px) rotate(0);
+    }
+    100% {
+      transform: translateY(9px) rotate(135deg);
+    }
+  }
+  
+  @keyframes inBtm {
+    0% {
+      transform: translateY(0) rotate(0);
+    }
+    50% {
+      transform: translateY(-9px) rotate(0);
+    }
+    100% {
+      transform: translateY(-9px) rotate(135deg);
+    }
+  }
+  
+  @keyframes outBtm {
+    0% {
+      transform: translateY(0) rotate(0);
+    }
+    50% {
+      transform: translateY(-9px) rotate(0);
+    }
+    100% {
+      transform: translateY(-9px) rotate(135deg);
+    }
+  }
+  
+
+@media screen and (max-width: 1000px) {
+    .navList {
+        width: 40vw;
+        height: 0;
+        overflow: hidden;
+    }
+
+    .navListII {
+        height: auto;
+        position: absolute;
+        top: 6.5rem;
+        right: 0;
+        width: 50vw;
+        transition: all 0.5s;
+    }
+
+    .ul {
+        flex-direction: column;
+        width: 100vw;
+        height: 100vh;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        background-color: #ebe3e3;
+        background-position: center top;
+    }
+
+    .li {
+        width: 100%;
+        padding: 0 15px;
+    }
+
+    .form {
+        width: 100%;
+    }
+
+    .span {
+        display: block;
+    }
+
+    .navTrigger {
+        display: block;
+    }
+}
+
+@media screen and (max-width:470px) {
+    
+.form {
+    padding-left: 0;
+}
+
+.input {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+}
+
+.button {
+    font-size: 1rem;
+}
+}
+
+@media screen and (max-width: 375px) {
+    .nav {
+        height: 50px;
+        justify-content: content;
+        align-items: center;
+    }
+
+    .navLogo {
+        font-size: 1.5rem;
+    }
+
+    .navListII {
+        top: 5rem;
+    }
+
+    .navTrigger i {
+        height: 3px;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .span {
+        width: 25px;
+        margin-left: 5px;
+    }
+
+    .navTrigger {
+        width: 25px;
+        margin-left: 5px;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .navTrigger i {
+        height: 2px;
+    }
+}
+
