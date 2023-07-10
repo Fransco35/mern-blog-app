@@ -1,6 +1,5 @@
 .form {
     padding: 1rem;
-    font-family: 'Big Shoulders Text', cursive;
 }
 
 .control {
@@ -9,6 +8,7 @@
 
 .control label {
     display: block;
+    font-family: 'Big Shoulders Text', cursive;
     font-weight: bold;
     margin-bottom: 0.5rem;
 }
