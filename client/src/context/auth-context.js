@@ -4,7 +4,10 @@ import { useNavigate } from "react-router-dom";
 const AuthContext = React.createContext({
   isLoggedin: false,
   onSignUp: async (enteredData) => {},
+  onLogin: async (enteredData) => {},
   googleSignIn: () => {},
+  facebookSignIn: () => {},
+  logout: () => {},
 });
 
 export const AuthContextProvider = (props) => {
@@ -34,6 +37,29 @@ export const AuthContextProvider = (props) => {
     window.location.href = "http://localhost:3001/api/google";
   };
 
+  const facebookAuth = () => {
+    window.location.href = "http://localhost:3001/api/facebook";
+  };
+
+  const login = async (enteredData) => {
+    try {
+      const response = await fetch("/api/login", {
+        method: "POST",
+        body: JSON.stringify(enteredData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.status === 200) {
+        alert("successfully logged in");
+        setIsLoggedIn(true);
+      }
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
   const navigateHomeOnSuccess = () => {
     setIsLoggedIn(true);
 
@@ -46,14 +72,30 @@ export const AuthContextProvider = (props) => {
     navigate("/write");
   };
 
+  const logout = async () => {
+    try {
+      const response = await fetch("/api/logout", {
+        method: "POST",
+      });
+      if (response.status === 200) {
+        setIsLoggedIn(false);
+      }
+    } catch (error) {
+      console.log(error.message);
+      alert("logout failure, try again");
+    }
+  };
   return (
     <AuthContext.Provider
       value={{
         isLoggedin: isLoggedIn,
         onSignUp: signup,
+        onLogin: login,
         googleSignIn: googleAuth,
+        facebookSignIn: facebookAuth,
         navigateHome: navigateHomeOnSuccess,
         navigateWrite: navigateWriteOnSuccess,
+        logout: logout,
       }}
     >
       {props.children}

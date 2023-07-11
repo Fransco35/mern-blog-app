@@ -10,6 +10,7 @@ const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const FacebookStrategy = require("passport-facebook").Strategy;
 const findOrCreate = require("mongoose-findorcreate");
 //
 dotenv.config();
@@ -17,6 +18,8 @@ dotenv.config();
 const cloudinary = require("cloudinary").v2;
 const multer = require("multer");
 const path = require("node:path");
+
+const loggedIn = require("./middleware/auth");
 
 const app = express();
 app.use(express.json());
@@ -130,6 +133,25 @@ passport.use(
   )
 );
 
+passport.use(
+  new FacebookStrategy(
+    {
+      clientID: process.env.FACEBOOK_APP_ID,
+      clientSecret: process.env.FACEBOOK_APP_SECRET,
+      callbackURL: "/api/facebook/login",
+      proxy: true,
+    },
+    function (accessToken, refreshToken, profile, cb) {
+      User.findOrCreate(
+        { facebookId: profile.id, fullname: profile.displayName },
+        function (err, user) {
+          return cb(err, user);
+        }
+      );
+    }
+  )
+);
+
 app.get("/api/", async (req, res) => {
   try {
     const articles = await Article.find();
@@ -139,7 +161,11 @@ app.get("/api/", async (req, res) => {
   }
 });
 
-app.get("/api/google/failed", (req, res) => {
+app.get("/api/success", loggedIn, (req, res) => {
+  res.redirect("http://localhost:3000/success");
+});
+
+app.get("/api/failed", (req, res) => {
   res.status(400).json({ message: "user authentication failed" });
 });
 
@@ -150,8 +176,21 @@ app.get(
 
 app.get(
   "/api/google/login",
-  passport.authenticate("google", { failureRedirect: "/api/google/failed" }),
-  (req, res) => {
+  passport.authenticate("google", {
+    successRedirect: "/api/success",
+    failureRedirect: "/api/failed",
+  })
+);
+
+app.get(
+  "/api/facebook",
+  passport.authenticate("facebook", { scope: ["public_profile", "email"] })
+);
+
+app.get(
+  "/api/facebook/login",
+  passport.authenticate("facebook", { failureRedirect: "/api/failed" }),
+  function (req, res) {
     // Successful authentication, redirect.
     res.redirect("http://localhost:3000/success");
   }
@@ -159,11 +198,6 @@ app.get(
 
 app.get("/api/login/failed", (req, res) => {
   res.status(400).json({ message: "login failed" });
-});
-
-app.get("logout", (req, res) => {
-  req.logout();
-  res.redirect("http://localhost:3000/");
 });
 
 app.post("/api/signup", (req, res) => {
@@ -184,6 +218,14 @@ app.post("/api/signup", (req, res) => {
     }
   );
 });
+
+app.post(
+  "/api/login",
+  passport.authenticate("local", { failureRedirect: "/api/failed" }),
+  function (req, res) {
+    res.status(200).json({ message: "successfully authenticated" });
+  }
+);
 
 app.post("/api/addArticles", upload.single("image"), async (req, res) => {
   const date = new Date();
@@ -212,6 +254,15 @@ app.post("/api/addArticles", upload.single("image"), async (req, res) => {
   } catch (error) {
     res.json(error.message);
   }
+});
+
+app.post("/api/logout", function (req, res, next) {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.status(200).redirect("http://localhost:3000/");
+  });
 });
 
 app.delete("/api/:id", async (req, res) => {
