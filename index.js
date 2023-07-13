@@ -178,18 +178,6 @@ app.post("/api/logout", function (req, res, next) {
   });
 });
 
-app.delete("/api/:id", async (req, res) => {
-  const requestedTaskId = req.params.id;
-  try {
-    const article = await Article.findById(requestedTaskId);
-    await cloudinary.uploader.destroy(article.cloudinary_id);
-    await article.deleteOne();
-    res.json(article);
-  } catch (error) {
-    res.send(error.message);
-  }
-});
-
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
   console.log(`Server has started on port ${port}`);
