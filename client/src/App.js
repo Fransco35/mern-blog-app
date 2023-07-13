@@ -8,6 +8,9 @@ import ArticleDetails from "./screens/ArticleDetails";
 import AuthContext from "./context/auth-context";
 import { useContext } from "react";
 
+import { inject } from "@vercel/analytics";
+inject();
+
 function App() {
   const context = useContext(AuthContext);
 
