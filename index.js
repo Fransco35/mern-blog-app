@@ -9,17 +9,12 @@ const session = require("express-session");
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const FacebookStrategy = require("passport-facebook").Strategy;
 const findOrCreate = require("mongoose-findorcreate");
 //
 dotenv.config();
 
-const cloudinary = require("cloudinary").v2;
-const multer = require("multer");
-const path = require("node:path");
-
-const loggedIn = require("./middleware/auth");
+const cloudinary = require("./utils/cloudinary");
+const upload = require("./utils/multer");
 
 const app = express();
 app.use(express.json());
@@ -53,32 +48,11 @@ mongoose
   .then(() => console.log("Mongodb is connected"))
   .catch((error) => console.log(error));
 
-//cloudinary config
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
-//multer config
-const upload = multer({
-  storage: multer.diskStorage({}),
-  fileFilter: (req, file, cb) => {
-    let ext = path.extname(file.originalname);
-    if (ext !== ".png" && ext !== ".jpeg" && ext !== ".jpg") {
-      cb(new Error("File is not supported"), false);
-      return;
-    }
-    cb(null, true);
-  },
-});
-
 //Defined user schema
 const userSchema = new mongoose.Schema({
   fullname: String,
   email: String,
   password: String,
-  articles: [{ type: mongoose.Schema.Types.ObjectId, ref: "Article" }],
 });
 
 userSchema.plugin(passportLocalMongoose);
@@ -92,6 +66,7 @@ const articleSchema = new mongoose.Schema({
   description: String,
   date: String,
   cloudinary_id: String,
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
 
 const Article = mongoose.model("Article", articleSchema);
@@ -111,89 +86,18 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "/api/google/login",
-    },
-    function (accessToken, refreshToken, profile, cb) {
-      User.findOrCreate(
-        {
-          googleId: profile.id,
-          fullname: profile.displayName,
-          username: profile.emails[0].value,
-        },
-        function (err, user) {
-          return cb(err, user);
-        }
-      );
-    }
-  )
-);
-
-passport.use(
-  new FacebookStrategy(
-    {
-      clientID: process.env.FACEBOOK_APP_ID,
-      clientSecret: process.env.FACEBOOK_APP_SECRET,
-      callbackURL: "/api/facebook/login",
-      proxy: true,
-    },
-    function (accessToken, refreshToken, profile, cb) {
-      User.findOrCreate(
-        { facebookId: profile.id, fullname: profile.displayName },
-        function (err, user) {
-          return cb(err, user);
-        }
-      );
-    }
-  )
-);
-
 app.get("/api/", async (req, res) => {
   try {
-    const articles = await Article.find();
+    const articles = await Article.find().populate("userId", "fullname");
     res.status(200).json(articles);
   } catch (error) {
     res.send(error.message);
   }
 });
 
-app.get("/api/success", loggedIn, (req, res) => {
-  res.redirect("http://localhost:3000/success");
-});
-
-app.get("/api/failed", (req, res) => {
-  res.status(400).json({ message: "user authentication failed" });
-});
-
 app.get(
   "/api/google",
   passport.authenticate("google", { scope: ["profile", "email"] })
-);
-
-app.get(
-  "/api/google/login",
-  passport.authenticate("google", {
-    successRedirect: "/api/success",
-    failureRedirect: "/api/failed",
-  })
-);
-
-app.get(
-  "/api/facebook",
-  passport.authenticate("facebook", { scope: ["public_profile", "email"] })
-);
-
-app.get(
-  "/api/facebook/login",
-  passport.authenticate("facebook", { failureRedirect: "/api/failed" }),
-  function (req, res) {
-    // Successful authentication, redirect.
-    res.redirect("http://localhost:3000/success");
-  }
 );
 
 app.get("/api/login/failed", (req, res) => {
@@ -212,7 +116,7 @@ app.post("/api/signup", (req, res) => {
         console.log(err.message);
       } else {
         passport.authenticate("local")(req, res, () => {
-          res.status(200).json({ message: "successfully authenticated" });
+          res.status(200).json({ userId: req.user.id });
         });
       }
     }
@@ -223,7 +127,7 @@ app.post(
   "/api/login",
   passport.authenticate("local", { failureRedirect: "/api/failed" }),
   function (req, res) {
-    res.status(200).json({ message: "successfully authenticated" });
+    res.status(200).json({ userId: req.user.id });
   }
 );
 
@@ -235,7 +139,7 @@ app.post("/api/addArticles", upload.single("image"), async (req, res) => {
 
   const newdate = `${day}/${month}/${year}`;
 
-  const { title, time, description } = req.body;
+  const { title, time, description, userId } = req.body;
 
   try {
     const image = await cloudinary.uploader.upload(req.file.path);
@@ -247,6 +151,7 @@ app.post("/api/addArticles", upload.single("image"), async (req, res) => {
       description: description,
       date: newdate,
       cloudinary_id: image.public_id,
+      userId: userId,
     });
 
     await article.save();

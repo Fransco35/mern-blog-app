@@ -4,7 +4,6 @@ import Home from "./screens/Home";
 import Write from "./screens/Write";
 import Login from "./screens/Login/Login";
 import Signup from "./screens/Signup/Signup";
-import Success from "./screens/Success/Success";
 import ArticleDetails from "./screens/ArticleDetails";
 import AuthContext from "./context/auth-context";
 import { useContext } from "react";
@@ -25,7 +24,6 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/:articleId" element={<ArticleDetails />} />
-          <Route path="/success" element={<Success />} />
         </Routes>
       </main>
     </div>

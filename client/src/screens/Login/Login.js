@@ -1,8 +1,5 @@
 import styles from "./login.module.css";
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFacebook } from "@fortawesome/free-brands-svg-icons";
-import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { useContext, useRef } from "react";
 import AuthContext from "../../context/auth-context";
 
@@ -32,24 +29,6 @@ const Login = () => {
   return (
     <div className={styles.container}>
       <div className={styles.heading}>Log in to your Rise Blog account</div>
-      <div onClick={context.googleSignIn} className={styles.social}>
-        <FontAwesomeIcon
-          icon={faGoogle}
-          size="lg"
-          style={{ color: "#f10404" }}
-        />
-        {"  "}
-        Continue with Google
-      </div>
-      <div onClick={context.facebookSignIn} className={styles.social}>
-        <FontAwesomeIcon
-          icon={faFacebook}
-          size="lg"
-          style={{ color: "#1658ca" }}
-        />{" "}
-        Continue with Facebook
-      </div>
-
       <form className={styles.form} onSubmit={sendLoginDetails}>
         <div className={styles.inputCover}>
           <input
