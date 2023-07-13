@@ -13,7 +13,7 @@
 .navLogo {
   font-family: sans-serif;
   font-weight: 700;
-  margin-right: 2rem;
+  margin-right: auto;
   padding-left: 2rem;
   font-size: 3rem;
 }
@@ -69,50 +69,6 @@
 }
 
 /* will edit soon */
-.form {
-  flex: 0 0 25%;
-  display: flex;
-  align-items: center;
-  justify-content: left;
-  padding-left: 1rem;
-  margin-right: auto;
-}
-
-.input {
-  font-family: inherit;
-  font-size: 1.5rem;
-  color: inherit;
-  background-color: #f4f2f2;
-  border: none;
-  padding: 1rem 2rem;
-  border-radius: 10rem;
-  width: auto;
-  transition: all 0.2;
-  margin-right: -3.25rem;
-}
-
-.input:focus {
-  background-color: #f0eeee;
-  outline: none;
-  border: 1px solid rgba(41, 41, 41, 1);
-}
-
-.input:focus + button {
-  background-color: #eee;
-}
-
-.button {
-  border: none;
-  background-color: #f4f2f4;
-}
-
-.button:focus {
-  outline: none;
-}
-
-.button:active {
-  transform: translateY(2px);
-}
 
 .span {
   cursor: pointer;
@@ -277,7 +233,7 @@
     right: 0;
     left: 0;
     bottom: 0;
-    background-color: #ebe3e3;
+    background-color: #fff;
     background-position: center top;
   }
 

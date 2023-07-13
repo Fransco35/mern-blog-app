@@ -12,7 +12,7 @@ const ArticleCard = (props) => {
         {limitedData}
         <button className={styles.articleButton}>
           {" "}
-          <Link to="/:articleId"> Read more </Link>{" "}
+          <Link to={`/articles/${props.id}`}> Read more </Link>{" "}
         </button>
       </p>
 

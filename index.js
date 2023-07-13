@@ -88,20 +88,28 @@ passport.deserializeUser(async (id, done) => {
 
 app.get("/api/", async (req, res) => {
   try {
-    const articles = await Article.find().populate("userId", "fullname");
+    const articles = await Article.find()
+      .sort({ _id: -1 })
+      .populate("userId", "fullname");
     res.status(200).json(articles);
   } catch (error) {
     res.send(error.message);
   }
 });
 
-app.get(
-  "/api/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
+app.get("/api/:articleId", async (req, res) => {
+  try {
+    const ObjectId = require("mongodb").ObjectId;
+    const requestedArticleId = req.params.articleId;
 
-app.get("/api/login/failed", (req, res) => {
-  res.status(400).json({ message: "login failed" });
+    const article = await Article.findOne({
+      _id: new ObjectId(requestedArticleId),
+    }).populate("userId", "fullname");
+
+    res.status(200).json(article);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
 });
 
 app.post("/api/signup", (req, res) => {

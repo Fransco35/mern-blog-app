@@ -39,11 +39,10 @@ const Home = () => {
     fetchArticles();
   }, [fetchArticles]);
 
-  console.log(articles);
   return (
     <Fragment>
       <Header />
-      {loading && <p>Loading ...</p>}
+      {loading && <h2>Loading ...</h2>}
       {!loading && articles.length > 0 && <ArticleLayout list={articles} />}
     </Fragment>
   );

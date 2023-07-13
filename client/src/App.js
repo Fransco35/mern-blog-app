@@ -23,7 +23,7 @@ function App() {
           />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/:articleId" element={<ArticleDetails />} />
+          <Route path="/articles/:articleId" element={<ArticleDetails />} />
         </Routes>
       </main>
     </div>

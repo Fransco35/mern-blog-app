@@ -1,16 +1,53 @@
+import { useParams } from "react-router-dom";
+
 import ArticleCardDetails from "../components/article/ArticleCardDetails";
+import { useState, useEffect, Fragment, useCallback } from "react";
 
 const ArticleDetails = () => {
+  const [article, setArticle] = useState({});
+  const [loading, setLoading] = useState(false);
+  const params = useParams();
 
-    return (
+  const articleId = params.articleId;
+
+  const fetchArticle = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`/api/${articleId}`);
+
+      if (response.status === 200) {
+        const data = await response.json();
+
+        if (data) {
+          setArticle(data);
+        }
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+
+    setLoading(false);
+  }, [articleId]);
+
+  useEffect(() => {
+    fetchArticle();
+  }, [articleId, fetchArticle]);
+
+  return (
+    <Fragment>
+      {loading && <h2>loading</h2>}
+      {!loading && article && (
         <ArticleCardDetails
-        title="A new article today"
-        date="Apr 5 2023"
-        time="2 mins read"
-        image="/3236267.jpg"
-        article="In this post, we will take a look at writing visual regression tests for React Native applications using React. In this post, we will take a look at writing visual regression tests for React Native applications using React"
+          id={article._id}
+          title={article.title}
+          date={article.date}
+          time={article.time}
+          image={article.image}
+          article={article.description}
         />
-    )
-}
+      )}
+    </Fragment>
+  );
+};
 
 export default ArticleDetails;

@@ -23,6 +23,7 @@ const ArticleLayout = (props) => {
         {currentPageData.map((item) => (
           <ArticleCard
             key={item.id}
+            id={item.id}
             image={item.image}
             title={item.title}
             article={item.description}

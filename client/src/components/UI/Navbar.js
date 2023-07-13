@@ -18,13 +18,11 @@ const Navbar = () => {
         <NavLink to="/">RISEBLOG</NavLink>
       </div>
 
-      <form action="#" className={styles.form}>
-        <input type="text" className={styles.input} placeholder="Search blog" />
-        <button className={styles.button}>GO</button>
-      </form>
-
       <div className={`${styles.navList} ${click ? styles.navListII : " "}`}>
         <ul className={styles.ul}>
+          <li className={`${styles.li} ${styles.navLink}`}>
+            <NavLink to="/"> Home</NavLink>
+          </li>
           <li className={`${styles.li} ${styles.navLink}`}>
             <NavLink to="/write"> Write</NavLink>
           </li>
