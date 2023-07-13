@@ -86,6 +86,7 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
+// GET ROUTES
 app.get("/api/", async (req, res) => {
   try {
     const articles = await Article.find()
@@ -111,6 +112,8 @@ app.get("/api/:articleId", async (req, res) => {
     res.status(400).json(error.message);
   }
 });
+
+// POST ROUTES
 
 app.post("/api/signup", (req, res) => {
   const { fullname, username, password } = req.body;
