@@ -1,0 +1,5 @@
+/node_modules
+
+# leave out .env and .DS_Store
+.env
+.DS_Store
