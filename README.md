@@ -4,7 +4,7 @@
 
 This is a fullstack blog application built with MERN stack (mongoDB, Express, React and Node.js). Visitors are able to read articles posted on the blog and also
 signup or login to write articles. Only authenticed users are able to navigate to the Write page else they'll be redirected to the login page without authentication.
-Each article can be fully accessed dynamically when the 'Read more' button is clicked and paginations is enacted to render only 10 articles per page.
+Each article can be fully accessed dynamically when the 'Read more' button is clicked and pagination is enacted to render only 10 articles per page.
 
 ## Features
 ### Frontend
