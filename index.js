@@ -177,8 +177,6 @@ app.post("/api/logout", function (req, res) {
   res.status(200).redirect("http://localhost:3000/");
 });
 
-module.exports = app;
-
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
   console.log(`Server has started on port ${port}`);
