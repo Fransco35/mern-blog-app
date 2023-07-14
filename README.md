@@ -3,7 +3,7 @@
 <img width="1277" alt="riseblog" src="https://github.com/Fransco35/mern-blog-app/assets/62514538/8018b71e-6b65-4315-a7b1-c0585fc351a8">
 
 This is a fullstack blog application built with MERN stack (mongoDB, Express, React and Node.js). Visitors are able to read articles posted on the blog and also
-signup or login to write articles. Only authenticed users are able to navigate to the Write page else they'll be redirected to the login page without authentication.
+signup or login to write articles. Only authenticated users are able to navigate to the Write page else they'll be redirected to the login page without authentication.
 Each article can be fully accessed dynamically when the 'Read more' button is clicked and pagination is enacted to render only 10 articles per page.
 
 ## Features
