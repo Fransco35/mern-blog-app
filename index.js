@@ -2,7 +2,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-const cors = require("cors");
 
 // auth
 const session = require("express-session");
@@ -30,14 +29,6 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.use(
-  cors({
-    origin: "http://localhost:3000/",
-    methods: "GET,POST,PUT,DELETE",
-    credentials: true,
-  })
-);
 
 //Database Connect
 mongoose
