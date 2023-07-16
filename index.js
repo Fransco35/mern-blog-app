@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+const cors = require("cors");
 
 // auth
 const session = require("express-session");
@@ -26,6 +27,7 @@ app.use(
     saveUninitialized: false,
   })
 );
+app.use(cors());
 
 app.use(passport.initialize());
 app.use(passport.session());
