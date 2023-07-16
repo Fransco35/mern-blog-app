@@ -13,7 +13,7 @@ const ArticleDetails = () => {
   const fetchArticle = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/${articleId}`);
+      const response = await fetch(`https://rise-blog-backend.onrender.com/api/${articleId}`);
 
       if (response.status === 200) {
         const data = await response.json();
