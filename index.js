@@ -16,6 +16,12 @@ dotenv.config();
 const cloudinary = require("./utils/cloudinary");
 const upload = require("./utils/multer");
 
+const corsOptions = {
+  "origin": "https://riseblog.onrender.com",
+  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+    optionsSuccessStatus: 200,
+  }
+
 const app = express();
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -27,10 +33,8 @@ app.use(
     saveUninitialized: false,
   })
 );
-app.use(cors(
-  "origin": "https://riseblog.onrender.com",
-  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
-));
+
+app.use(cors(corsOptions));
 
 app.use(passport.initialize());
 app.use(passport.session());
