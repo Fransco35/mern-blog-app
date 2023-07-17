@@ -34,6 +34,7 @@ const Login = () => {
           <input
             type="email"
             id="email"
+            name="email"
             placeholder="Email Address"
             className={styles.input}
             ref={usernameRef}
@@ -49,6 +50,7 @@ const Login = () => {
           <input
             type="password"
             id="password"
+            name="password"
             placeholder="Enter your password"
             className={styles.input}
             ref={passwordRef}

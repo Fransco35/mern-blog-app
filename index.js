@@ -25,6 +25,9 @@ app.use(
     secret: process.env.SECRET,
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      maxAge: 2 * 60 * 1000,
+    },
   })
 );
 app.use(cors());
@@ -127,6 +130,10 @@ app.post("/api/signup", (req, res) => {
   );
 });
 
+app.get("/api/failed", (req, res) => {
+  res.status(400).json({ message: "login unsuccessful" });
+});
+
 app.post(
   "/api/login",
   passport.authenticate("local", { failureRedirect: "/api/failed" }),
@@ -165,15 +172,14 @@ app.post("/api/addArticles", upload.single("image"), async (req, res) => {
   }
 });
 
-app.post("/api/logout", function (req, res, next) {
-  req.logout((err) => {
-    if (err) {
-      console.log(err);
-      return next(err);
-    }
-    req.user = null;
+app.post("/api/logout", function (req, res) {
+  console.log("attempting to log out of session");
+  try {
+    req.logout();
     res.status(200).json({ message: "successfully logged out" });
-  });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 const port = process.env.PORT || 3001;

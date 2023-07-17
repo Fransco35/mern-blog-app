@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Navigate } from "react-router-dom";
 
 const AuthContext = React.createContext({
   isLoggedin: false,
@@ -67,11 +66,12 @@ export const AuthContextProvider = (props) => {
         "https://rise-blog-backend.onrender.com/api/logout",
         {
           method: "POST",
+          credentials: "include",
         }
       );
       if (response.status === 200) {
         setIsLoggedIn(false);
-        <Navigate to="/" />;
+        alert("successfully logged out");
       }
     } catch (error) {
       console.log(error.message);
