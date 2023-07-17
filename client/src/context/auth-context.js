@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Navigate } from "react-router-dom";
 
 const AuthContext = React.createContext({
   isLoggedin: false,
@@ -14,13 +15,16 @@ export const AuthContextProvider = (props) => {
 
   const signup = async (enteredData) => {
     try {
-      const response = await fetch("https://rise-blog-backend.onrender.com/api/signup", {
-        method: "POST",
-        body: JSON.stringify(enteredData),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        "https://rise-blog-backend.onrender.com/api/signup",
+        {
+          method: "POST",
+          body: JSON.stringify(enteredData),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.status === 200) {
         alert("successfully signed in");
@@ -35,13 +39,16 @@ export const AuthContextProvider = (props) => {
 
   const login = async (enteredData) => {
     try {
-      const response = await fetch("https://rise-blog-backend.onrender.com/api/login", {
-        method: "POST",
-        body: JSON.stringify(enteredData),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        "https://rise-blog-backend.onrender.com/api/login",
+        {
+          method: "POST",
+          body: JSON.stringify(enteredData),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.status === 200) {
         alert("successfully logged in");
@@ -56,11 +63,15 @@ export const AuthContextProvider = (props) => {
 
   const logout = async () => {
     try {
-      const response = await fetch("https://rise-blog-backend.onrender.com/api/logout", {
-        method: "POST",
-      });
+      const response = await fetch(
+        "https://rise-blog-backend.onrender.com/api/logout",
+        {
+          method: "POST",
+        }
+      );
       if (response.status === 200) {
         setIsLoggedIn(false);
+        <Navigate to="/" />;
       }
     } catch (error) {
       console.log(error.message);

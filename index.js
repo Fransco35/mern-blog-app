@@ -165,9 +165,13 @@ app.post("/api/addArticles", upload.single("image"), async (req, res) => {
   }
 });
 
-app.post("/api/logout", function (req, res) {
-  req.logout();
-  res.status(200).redirect("https://riseblog.onrender.com/");
+app.post("/api/logout", function (req, res, next) {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.status(200).json({ message: "successfully logged out" });
+  });
 });
 
 const port = process.env.PORT || 3001;
