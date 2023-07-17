@@ -27,7 +27,10 @@ app.use(
     saveUninitialized: false,
   })
 );
-app.use(cors());
+app.use(cors(
+  "origin": "https://riseblog.onrender.com",
+  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+));
 
 app.use(passport.initialize());
 app.use(passport.session());
