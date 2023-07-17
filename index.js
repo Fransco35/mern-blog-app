@@ -168,8 +168,10 @@ app.post("/api/addArticles", upload.single("image"), async (req, res) => {
 app.post("/api/logout", function (req, res, next) {
   req.logout((err) => {
     if (err) {
+      console.log(err);
       return next(err);
     }
+    req.user = null;
     res.status(200).json({ message: "successfully logged out" });
   });
 });
