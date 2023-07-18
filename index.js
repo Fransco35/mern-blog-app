@@ -20,6 +20,7 @@ const corsOptions = {
   origin: "https://riseblog.onrender.com",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   optionsSuccessStatus: 200,
+  credentials: true,
 };
 
 const app = express();
