@@ -35,7 +35,7 @@ app.use(
   })
 );
 
-app.use(cors());
+app.use(cors(corsOptions));
 
 app.use(passport.initialize());
 app.use(passport.session());
