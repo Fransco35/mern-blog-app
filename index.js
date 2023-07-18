@@ -5,7 +5,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 
 // auth
-const session = require("express-session");
+const session = require("cookie-session");
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 
@@ -16,6 +16,12 @@ dotenv.config();
 const cloudinary = require("./utils/cloudinary");
 const upload = require("./utils/multer");
 
+const corsOptions = {
+  origin: "https://riseblog.onrender.com",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  optionsSuccessStatus: 200,
+};
+
 const app = express();
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -23,13 +29,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
   session({
     secret: process.env.SECRET,
-    resave: false,
-    saveUninitialized: false,
     cookie: {
       maxAge: 2 * 60 * 1000,
     },
   })
 );
+
 app.use(cors());
 
 app.use(passport.initialize());
@@ -172,14 +177,17 @@ app.post("/api/addArticles", upload.single("image"), async (req, res) => {
   }
 });
 
-app.post("/api/logout", function (req, res) {
-  console.log("attempting to log out of session");
+app.post("/api/logout", async function (req, res, next) {
   try {
-    req.logout();
-    res.status(200).json({ message: "successfully logged out" });
-  } catch (err) {
-    console.log(err);
+    req.logout(req.user, function (err) {
+      if (err) {
+        return next(err);
+      }
+    });
+  } catch (error) {
+    console.log(error);
   }
+  res.sendStatus(200);
 });
 
 const port = process.env.PORT || 3001;

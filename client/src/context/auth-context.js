@@ -40,6 +40,7 @@ export const AuthContextProvider = (props) => {
     try {
       const response = await fetch(
         "https://rise-blog-backend.onrender.com/api/login",
+
         {
           method: "POST",
           body: JSON.stringify(enteredData),
@@ -64,6 +65,7 @@ export const AuthContextProvider = (props) => {
     try {
       const response = await fetch(
         "https://rise-blog-backend.onrender.com/api/logout",
+
         {
           method: "POST",
           credentials: "include",
