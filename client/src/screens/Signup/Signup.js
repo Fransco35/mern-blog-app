@@ -30,6 +30,15 @@ const Signup = () => {
     passwordRef.current.value = "";
   };
 
+  if (context.isLoggedin) {
+    return (
+      <div>
+        {" "}
+        <h1>You're already logged in </h1>{" "}
+      </div>
+    );
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.heading}> Sign up and start writing</div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const AuthContext = React.createContext({
   isLoggedin: false,
@@ -12,10 +12,20 @@ export const AuthContextProvider = (props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userId, setuserId] = useState(null);
 
+  useEffect(() => {
+    const userIsLoggedIn = localStorage.getItem("userId");
+    if (userIsLoggedIn) {
+      const cachedUser = userIsLoggedIn;
+      setuserId(cachedUser);
+      setIsLoggedIn(true);
+    }
+  }, []);
+
   const signup = async (enteredData) => {
     try {
       const response = await fetch(
-        "https://rise-blog-backend.onrender.com/api/signup",
+        // "https://rise-blog-backend.onrender.com/api/signup",
+        "/api/signup",
         {
           method: "POST",
           body: JSON.stringify(enteredData),
@@ -29,7 +39,10 @@ export const AuthContextProvider = (props) => {
         alert("successfully signed in");
         setIsLoggedIn(true);
         const data = await response.json();
-        setuserId(data.userId);
+        if (data) {
+          setuserId(data.userId);
+          localStorage.setItem("userId", data.userId);
+        }
       }
     } catch (error) {
       console.log(error.response);
@@ -39,7 +52,8 @@ export const AuthContextProvider = (props) => {
   const login = async (enteredData) => {
     try {
       const response = await fetch(
-        "https://rise-blog-backend.onrender.com/api/login",
+        // "https://rise-blog-backend.onrender.com/api/login",
+        "/api/login",
 
         {
           method: "POST",
@@ -54,7 +68,10 @@ export const AuthContextProvider = (props) => {
         alert("successfully logged in");
         setIsLoggedIn(true);
         const data = await response.json();
-        setuserId(data.userId);
+        if (data) {
+          setuserId(data);
+        }
+        localStorage.setItem("userId", data.userId);
       }
     } catch (error) {
       console.log(error.response);
@@ -64,7 +81,8 @@ export const AuthContextProvider = (props) => {
   const logout = async () => {
     try {
       const response = await fetch(
-        "https://rise-blog-backend.onrender.com/api/logout",
+        // "https://rise-blog-backend.onrender.com/api/logout",
+        "/api/logout",
 
         {
           method: "POST",
@@ -73,6 +91,8 @@ export const AuthContextProvider = (props) => {
       );
       if (response.status === 200) {
         setIsLoggedIn(false);
+        setuserId(null);
+        localStorage.clear();
         alert("successfully logged out");
       }
     } catch (error) {

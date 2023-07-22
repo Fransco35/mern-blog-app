@@ -7,17 +7,22 @@ const cors = require("cors");
 // auth
 const session = require("cookie-session");
 const passport = require("passport");
-const passportLocalMongoose = require("passport-local-mongoose");
 
-const findOrCreate = require("mongoose-findorcreate");
-//
+require("./models/User");
+require("./models/Article");
+require("./auth/passport");
+
+const User = mongoose.model("User");
+const Article = mongoose.model("Article");
+
 dotenv.config();
 
 const cloudinary = require("./utils/cloudinary");
 const upload = require("./utils/multer");
 
 const corsOptions = {
-  origin: "https://riseblog.onrender.com",
+  // origin: "https://riseblog.onrender.com",
+  origin: "https://localhost:3000",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   optionsSuccessStatus: 200,
   credentials: true,
@@ -49,44 +54,6 @@ mongoose
   })
   .then(() => console.log("Mongodb is connected"))
   .catch((error) => console.log(error));
-
-//Defined user schema
-const userSchema = new mongoose.Schema({
-  fullname: String,
-  email: String,
-  password: String,
-});
-
-userSchema.plugin(passportLocalMongoose);
-userSchema.plugin(findOrCreate);
-
-//Defined article schema
-const articleSchema = new mongoose.Schema({
-  title: String,
-  time: String,
-  image: String,
-  description: String,
-  date: String,
-  cloudinary_id: String,
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-});
-
-const Article = mongoose.model("Article", articleSchema);
-const User = mongoose.model("User", userSchema);
-
-passport.use(User.createStrategy());
-
-passport.serializeUser(function (user, done) {
-  done(null, user.id);
-});
-
-passport.deserializeUser(async (id, done) => {
-  try {
-    return done(null, await User.findById(id));
-  } catch (error) {
-    return done(error);
-  }
-});
 
 // GET ROUTES
 app.get("/api/", async (req, res) => {
@@ -129,7 +96,9 @@ app.post("/api/signup", (req, res) => {
         console.log(err.message);
       } else {
         passport.authenticate("local")(req, res, () => {
-          res.status(200).json({ userId: req.user.id });
+          res.status(200).json({
+            userId: req.user.id,
+          });
         });
       }
     }
@@ -144,7 +113,9 @@ app.post(
   "/api/login",
   passport.authenticate("local", { failureRedirect: "/api/failed" }),
   function (req, res) {
-    res.status(200).json({ userId: req.user.id });
+    res.status(200).json({
+      userId: req.user.id,
+    });
   }
 );
 
