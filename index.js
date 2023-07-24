@@ -75,7 +75,10 @@ app.get("/api/:articleId", async (req, res) => {
 
     const article = await Article.findOne({
       _id: new ObjectId(requestedArticleId),
-    }).populate("userId", "fullname");
+    })
+      .populate("userId", "fullname")
+      .populate("comments")
+      .exec();
 
     res.status(200).json(article);
   } catch (error) {
@@ -155,25 +158,43 @@ app.post("/api/:articleId/comment", async (req, res) => {
 
   const ObjectId = require("mongodb").ObjectId;
   const articleId = req.params.articleId;
-  const relatedArticle = await Article.findOne({
-    _id: new ObjectId(articleId),
-  });
-
-  const newComment = new Comment({
-    name: name,
-    email: email,
-    comment: comment,
-  });
-
-  await newComment.save();
-
-  relatedArticle.comments = relatedArticle.comments || [];
-
-  relatedArticle.comments.push(newComment);
 
   try {
-    await relatedArticle.save();
-    res.status(201).json({ message: "comment posted! " });
+    const relatedArticle = await Article.findOne({
+      _id: new ObjectId(articleId),
+    });
+
+    if (req.isAuthenticated) {
+      const newComment = new Comment({
+        name: req.user.fullname,
+        email: req.user.username,
+        comment: comment,
+      });
+
+      await newComment.save();
+
+      relatedArticle.comments = relatedArticle.comments || [];
+
+      relatedArticle.comments.push(newComment);
+
+      await relatedArticle.save();
+      res.status(201).json({ message: "comment posted! " });
+    } else {
+      const newComment = new Comment({
+        name: name,
+        email: email,
+        comment: comment,
+      });
+
+      await newComment.save();
+
+      relatedArticle.comments = relatedArticle.comments || [];
+
+      relatedArticle.comments.push(newComment);
+
+      await relatedArticle.save();
+      res.status(201).json({ message: "comment posted! " });
+    }
   } catch (error) {
     console.log(error);
   }

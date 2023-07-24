@@ -47,6 +47,7 @@ const ArticleDetails = () => {
           time={article.time}
           image={article.image}
           article={article.description}
+          comment={article.comments}
         />
       )}
     </Fragment>

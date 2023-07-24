@@ -11,6 +11,11 @@
   font-size: 3.4rem;
 }
 
+.detail h2 {
+  margin: 10px 0;
+  font-size: 2rem;
+}
+
 .img {
   max-width: 100%;
   height: auto;
@@ -48,11 +53,19 @@
   .detail h1 {
     font-size: 2.5rem;
   }
+
+  .detail h2 {
+    font-size: 1.5rem;
+  }
 }
 
 @media screen and (max-width: 375px) {
   .detail h1 {
     font-size: 2.1rem;
+  }
+
+  .detail h1 {
+    font-size: 1.1rem;
   }
 
   .article {
