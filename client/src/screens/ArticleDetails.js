@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 
 import ArticleCardDetails from "../components/article/ArticleCardDetails";
 import { useState, useEffect, Fragment, useCallback } from "react";
+import Card from "../components/UI/Card";
 
 const ArticleDetails = () => {
   const [article, setArticle] = useState({});
@@ -38,7 +39,11 @@ const ArticleDetails = () => {
 
   return (
     <Fragment>
-      {loading && <h2>loading</h2>}
+      {loading && (
+        <Card>
+          <h1>Loading...</h1>
+        </Card>
+      )}
       {!loading && article && (
         <ArticleCardDetails
           id={article._id}

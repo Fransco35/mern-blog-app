@@ -2,6 +2,7 @@ import styles from "./signup.module.css";
 import { Link } from "react-router-dom";
 import { useRef, useContext } from "react";
 import AuthContext from "../../context/auth-context";
+import Card from "../../components/UI/Card";
 
 const Signup = () => {
   const context = useContext(AuthContext);
@@ -32,10 +33,9 @@ const Signup = () => {
 
   if (context.isLoggedin) {
     return (
-      <div>
-        {" "}
-        <h1>You're already logged in </h1>{" "}
-      </div>
+      <Card>
+        <h1>You're already logged in </h1>
+      </Card>
     );
   }
 

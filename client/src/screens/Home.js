@@ -1,6 +1,7 @@
 import Header from "../layout/Header";
 import ArticleLayout from "../layout/ArticleLayout";
 import { Fragment, useState, useEffect, useCallback } from "react";
+import Card from "../components/UI/Card";
 
 const Home = () => {
   const [articles, setArticles] = useState([]);
@@ -45,7 +46,11 @@ const Home = () => {
   return (
     <Fragment>
       <Header />
-      {loading && <h2>Loading ...</h2>}
+      {loading && (
+        <Card>
+          <h1>Loading ...</h1>
+        </Card>
+      )}
       {!loading && articles.length > 0 && <ArticleLayout list={articles} />}
     </Fragment>
   );
