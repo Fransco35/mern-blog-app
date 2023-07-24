@@ -10,11 +10,12 @@ const passport = require("passport");
 
 require("./models/User");
 require("./models/Article");
+require("./models/Comment");
 require("./auth/passport");
 
 const User = mongoose.model("User");
 const Article = mongoose.model("Article");
-
+const Comment = mongoose.model("Comment");
 dotenv.config();
 
 const cloudinary = require("./utils/cloudinary");
@@ -146,6 +147,35 @@ app.post("/api/addArticles", upload.single("image"), async (req, res) => {
     res.status(201).json({ message: "article created successfully" });
   } catch (error) {
     res.json(error.message);
+  }
+});
+
+app.post("/api/:articleId/comment", async (req, res) => {
+  const { name, email, comment } = req.body;
+
+  const ObjectId = require("mongodb").ObjectId;
+  const articleId = req.params.articleId;
+  const relatedArticle = await Article.findOne({
+    _id: new ObjectId(articleId),
+  });
+
+  const newComment = new Comment({
+    name: name,
+    email: email,
+    comment: comment,
+  });
+
+  await newComment.save();
+
+  relatedArticle.comments = relatedArticle.comments || [];
+
+  relatedArticle.comments.push(newComment);
+
+  try {
+    await relatedArticle.save();
+    res.status(201).json({ message: "comment posted! " });
+  } catch (error) {
+    console.log(error);
   }
 });
 
