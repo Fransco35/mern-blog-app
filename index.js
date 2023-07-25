@@ -22,8 +22,7 @@ const cloudinary = require("./utils/cloudinary");
 const upload = require("./utils/multer");
 
 const corsOptions = {
-  // origin: "https://riseblog.onrender.com",
-  origin: "https://localhost:3000",
+  origin: "https://riseblog.onrender.com",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   optionsSuccessStatus: 200,
   credentials: true,
