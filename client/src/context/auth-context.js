@@ -44,8 +44,12 @@ export const AuthContextProvider = (props) => {
         const data = await response.json();
         if (data) {
           setuserId(data.userId);
-          localStorage.setItem("userId", data.userId);
         }
+        localStorage.setItem("userId", data.userId);
+        setTimeout(() => {
+          setIsLoggedIn(false);
+          localStorage.removeItem("userId");
+        }, 4 * 60 * 60 * 1000);
         navigate("/");
       }
     } catch (error) {
@@ -76,6 +80,10 @@ export const AuthContextProvider = (props) => {
           setuserId(data);
         }
         localStorage.setItem("userId", data.userId);
+        setTimeout(() => {
+          setIsLoggedIn(false);
+          localStorage.removeItem("userId");
+        }, 4 * 60 * 60 * 1000);
       }
       navigate("/");
     } catch (error) {
