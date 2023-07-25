@@ -158,6 +158,13 @@ app.post("/api/:articleId/comment", async (req, res) => {
   const ObjectId = require("mongodb").ObjectId;
   const articleId = req.params.articleId;
 
+  const date = new Date();
+  const month = date.getUTCMonth() + 1;
+  const day = date.getUTCDate();
+  const year = date.getUTCFullYear();
+
+  const newdate = `${day}-${month}-${year}`;
+
   try {
     const relatedArticle = await Article.findOne({
       _id: new ObjectId(articleId),
@@ -168,6 +175,7 @@ app.post("/api/:articleId/comment", async (req, res) => {
         name: req.user.fullname,
         email: req.user.username,
         comment: comment,
+        date: newdate,
       });
 
       await newComment.save();
@@ -183,6 +191,7 @@ app.post("/api/:articleId/comment", async (req, res) => {
         name: name,
         email: email,
         comment: comment,
+        date: newdate,
       });
 
       await newComment.save();

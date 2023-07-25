@@ -8,7 +8,9 @@ const ArticleComment = (props) => {
         title="the commentor's avatar"
         className={styles.avatar}
       />
-      <p className={styles.authorName}>{props.name}</p>
+      <p className={styles.authorName}>
+        {props.name} posted on <span>{props.date}</span>
+      </p>
       <p className={styles.authorComment}>{props.comment}</p>
     </div>
   );

@@ -49,6 +49,7 @@ const ArticleCardDetails = (props) => {
             key={comment._id}
             name={comment.name}
             comment={comment.comment}
+            date={comment.date}
           />
         ))}
       <hr />
