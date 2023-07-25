@@ -23,6 +23,7 @@ const upload = require("./utils/multer");
 
 const corsOptions = {
   origin: "https://riseblog.onrender.com",
+
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   optionsSuccessStatus: 200,
   credentials: true,
@@ -36,8 +37,9 @@ app.use(
   session({
     secret: process.env.SECRET,
     cookie: {
-      maxAge: 2 * 60 * 1000,
+      maxAge: 24 * 60 * 60 * 1000,
     },
+    sameSite: "none",
   })
 );
 
@@ -215,6 +217,7 @@ app.post("/api/logout", async function (req, res, next) {
         return next(err);
       }
     });
+    req.session = null;
   } catch (error) {
     console.log(error);
   }
