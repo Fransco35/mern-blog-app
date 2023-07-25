@@ -15,8 +15,7 @@ const ArticleDetails = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        // `https://rise-blog-backend.onrender.com/api/${articleId}`
-        `/api/${articleId}`
+        `https://rise-blog-backend.onrender.com/api/${articleId}`
       );
 
       if (response.status === 200) {

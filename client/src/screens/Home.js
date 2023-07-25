@@ -11,8 +11,7 @@ const Home = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        // "https://rise-blog-backend.onrender.com/api/"
-        "/api/"
+        "https://rise-blog-backend.onrender.com/api/"
       );
       if (response.status === 200) {
         const data = await response.json();

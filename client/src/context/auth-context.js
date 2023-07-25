@@ -27,8 +27,7 @@ export const AuthContextProvider = (props) => {
   const signup = async (enteredData) => {
     try {
       const response = await fetch(
-        // "https://rise-blog-backend.onrender.com/api/signup",
-        "/api/signup",
+        "https://rise-blog-backend.onrender.com/api/signup",
         {
           method: "POST",
           body: JSON.stringify(enteredData),
@@ -60,9 +59,7 @@ export const AuthContextProvider = (props) => {
   const login = async (enteredData) => {
     try {
       const response = await fetch(
-        // "https://rise-blog-backend.onrender.com/api/login",
-        "/api/login",
-
+        "https://rise-blog-backend.onrender.com/api/login",
         {
           method: "POST",
           body: JSON.stringify(enteredData),
@@ -94,9 +91,7 @@ export const AuthContextProvider = (props) => {
   const logout = async () => {
     try {
       const response = await fetch(
-        // "https://rise-blog-backend.onrender.com/api/logout",
-        "/api/logout",
-
+        "https://rise-blog-backend.onrender.com/api/logout",
         {
           method: "POST",
           credentials: "include",

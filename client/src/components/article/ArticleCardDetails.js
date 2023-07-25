@@ -5,13 +5,16 @@ import CommentForm from "./CommentForm";
 const ArticleCardDetails = (props) => {
   const commentHandler = async (commentData) => {
     try {
-      const response = await fetch(`/api/${props.id}/comment`, {
-        method: "POST",
-        body: JSON.stringify(commentData),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `https://rise-blog-backend.onrender.com/api/${props.id}/comment`,
+        {
+          method: "POST",
+          body: JSON.stringify(commentData),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.status === 201) {
         alert("comment successfully saved");
