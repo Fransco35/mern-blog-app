@@ -163,7 +163,7 @@ app.post("/api/:articleId/comment", async (req, res) => {
       _id: new ObjectId(articleId),
     });
 
-    if (req.isAuthenticated) {
+    if (req.user) {
       const newComment = new Comment({
         name: req.user.fullname,
         email: req.user.username,
