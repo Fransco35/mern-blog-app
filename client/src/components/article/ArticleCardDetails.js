@@ -16,7 +16,7 @@ const ArticleCardDetails = (props) => {
         }
       );
 
-      if (response.status === 201) {
+      if (response.status === 200) {
         alert("comment successfully saved");
       }
     } catch (error) {

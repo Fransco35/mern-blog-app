@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const AuthContext = React.createContext({
   isLoggedin: false,
-  userId: null,
+  user: {},
   onSignUp: async (enteredData) => {},
   onLogin: async (enteredData) => {},
   logout: () => {},
@@ -12,14 +12,12 @@ const AuthContext = React.createContext({
 
 export const AuthContextProvider = (props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userId, setuserId] = useState(null);
+  const [user, setUser] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
-    const userIsLoggedIn = localStorage.getItem("userId");
+    const userIsLoggedIn = localStorage.getItem("token");
     if (userIsLoggedIn) {
-      const cachedUser = userIsLoggedIn;
-      setuserId(cachedUser);
       setIsLoggedIn(true);
     }
   }, []);
@@ -38,17 +36,22 @@ export const AuthContextProvider = (props) => {
       );
 
       if (response.status === 200) {
-        alert("successfully signed in");
+        alert("successfully signed up");
         setIsLoggedIn(true);
         const data = await response.json();
-        if (data) {
-          setuserId(data.userId);
-        }
-        localStorage.setItem("userId", data.userId);
+        localStorage.setItem("token", data.token);
         setTimeout(() => {
           setIsLoggedIn(false);
-          localStorage.removeItem("userId");
-        }, 4 * 60 * 60 * 1000);
+          localStorage.removeItem("token");
+        }, 7 * 60 * 60 * 1000);
+
+        if (data) {
+          setUser({
+            name: data.fullname,
+            email: data.username,
+          });
+        }
+
         navigate("/");
       }
     } catch (error) {
@@ -73,16 +76,19 @@ export const AuthContextProvider = (props) => {
         alert("successfully logged in");
         setIsLoggedIn(true);
         const data = await response.json();
-        if (data) {
-          setuserId(data);
-        }
-        localStorage.setItem("userId", data.userId);
+        localStorage.setItem("token", data.token);
         setTimeout(() => {
           setIsLoggedIn(false);
-          localStorage.removeItem("userId");
-        }, 4 * 60 * 60 * 1000);
+          localStorage.removeItem("token");
+        }, 7 * 60 * 60 * 1000);
+        if (data) {
+          setUser({
+            name: data.fullname,
+            email: data.username,
+          });
+        }
+        navigate("/");
       }
-      navigate("/");
     } catch (error) {
       console.log(error.response);
     }
@@ -99,7 +105,6 @@ export const AuthContextProvider = (props) => {
       );
       if (response.status === 200) {
         setIsLoggedIn(false);
-        setuserId(null);
         localStorage.clear();
         alert("successfully logged out");
       }
@@ -112,7 +117,7 @@ export const AuthContextProvider = (props) => {
     <AuthContext.Provider
       value={{
         isLoggedin: isLoggedIn,
-        userId: userId,
+        user: user,
         onSignUp: signup,
         onLogin: login,
         logout: logout,

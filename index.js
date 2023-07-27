@@ -3,15 +3,15 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
+const jwt = require("jsonwebtoken");
+const passport = require("passport");
 
 // auth
 const session = require("cookie-session");
-const passport = require("passport");
 
 require("./models/User");
 require("./models/Article");
 require("./models/Comment");
-require("./auth/passport");
 
 const User = mongoose.model("User");
 const Article = mongoose.model("Article");
@@ -23,7 +23,6 @@ const upload = require("./utils/multer");
 
 const corsOptions = {
   origin: "https://riseblog.onrender.com",
-
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   optionsSuccessStatus: 200,
   credentials: true,
@@ -37,9 +36,8 @@ app.use(
   session({
     secret: process.env.SECRET,
     cookie: {
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: 7 * 60 * 60 * 1000,
     },
-    sameSite: "none",
   })
 );
 
@@ -47,6 +45,8 @@ app.use(cors(corsOptions));
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+require("./auth/passport");
 
 //Database Connect
 mongoose
@@ -56,6 +56,10 @@ mongoose
   })
   .then(() => console.log("Mongodb is connected"))
   .catch((error) => console.log(error));
+
+const generateToken = (userId, email) => {
+  return jwt.sign({ userId, email }, process.env.SECRET, { expiresIn: "7h" });
+};
 
 // GET ROUTES
 app.get("/api/", async (req, res) => {
@@ -89,25 +93,34 @@ app.get("/api/:articleId", async (req, res) => {
 
 // POST ROUTES
 
-app.post("/api/signup", (req, res) => {
+app.post("/api/signup", async (req, res) => {
   const { fullname, username, password } = req.body;
 
-  User.register(
-    { username: username, fullname: fullname },
-    password,
-    (err, user) => {
-      if (err) {
-        res.status(err.status);
-        console.log(err.message);
-      } else {
-        passport.authenticate("local")(req, res, () => {
-          res.status(200).json({
-            userId: req.user.id,
-          });
-        });
+  try {
+    User.register(
+      { username: username, fullname: fullname },
+      password,
+      (err, user) => {
+        if (err) {
+          res.status(err.status).json({ error: "Error Signing up try again" });
+          console.log(err.message);
+        } else {
+          passport.authenticate("local", {
+            session: false,
+            failureRedirect: "/api/failed",
+          }),
+            function (req, res) {
+              const { _id, username, fullname } = req.user;
+              const token = generateToken(_id, username);
+
+              res.status(200).json({ token, fullname, username });
+            };
+        }
       }
-    }
-  );
+    );
+  } catch (error) {
+    res.status(error.status).json({ error: "Error signing up" });
+  }
 });
 
 app.get("/api/failed", (req, res) => {
@@ -116,11 +129,15 @@ app.get("/api/failed", (req, res) => {
 
 app.post(
   "/api/login",
-  passport.authenticate("local", { failureRedirect: "/api/failed" }),
+  passport.authenticate("local", {
+    session: false,
+    failureRedirect: "/api/failed",
+  }),
   function (req, res) {
-    res.status(200).json({
-      userId: req.user.id,
-    });
+    const { _id, username, fullname } = req.user;
+    const token = generateToken(_id, username);
+
+    res.status(200).json({ token, fullname, username });
   }
 );
 
@@ -171,40 +188,21 @@ app.post("/api/:articleId/comment", async (req, res) => {
     const relatedArticle = await Article.findOne({
       _id: new ObjectId(articleId),
     });
+    const newComment = new Comment({
+      name: name,
+      email: email,
+      comment: comment,
+      date: newdate,
+    });
 
-    if (req.user) {
-      const newComment = new Comment({
-        name: req.user.fullname,
-        email: req.user.username,
-        comment: comment,
-        date: newdate,
-      });
+    await newComment.save();
 
-      await newComment.save();
+    relatedArticle.comments = relatedArticle.comments || [];
 
-      relatedArticle.comments = relatedArticle.comments || [];
+    relatedArticle.comments.push(newComment);
 
-      relatedArticle.comments.push(newComment);
-
-      await relatedArticle.save();
-      res.status(201).json({ message: "comment posted! " });
-    } else {
-      const newComment = new Comment({
-        name: name,
-        email: email,
-        comment: comment,
-        date: newdate,
-      });
-
-      await newComment.save();
-
-      relatedArticle.comments = relatedArticle.comments || [];
-
-      relatedArticle.comments.push(newComment);
-
-      await relatedArticle.save();
-      res.status(201).json({ message: "comment posted! " });
-    }
+    await relatedArticle.save();
+    res.status(200).json({ message: "comment posted! " });
   } catch (error) {
     console.log(error);
   }
@@ -217,7 +215,6 @@ app.post("/api/logout", async function (req, res, next) {
         return next(err);
       }
     });
-    req.session = null;
   } catch (error) {
     console.log(error);
   }

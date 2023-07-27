@@ -4,6 +4,7 @@ import styles from "./commentform.module.css";
 
 const CommentForm = (props) => {
   const context = useContext(AuthContext);
+  const user = useContext(AuthContext).user;
 
   const nameRef = useRef();
   const emailRef = useRef();
@@ -16,12 +17,13 @@ const CommentForm = (props) => {
       const enteredComment = commentRef.current.value;
 
       const commentData = {
-        name: "",
-        email: "",
+        name: user.name,
+        email: user.email,
         comment: enteredComment,
       };
 
       props.onAddComment(commentData);
+
       commentRef.current.value = "";
     } else {
       const enteredName = nameRef.current.value;
