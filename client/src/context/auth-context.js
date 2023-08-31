@@ -25,7 +25,7 @@ export const AuthContextProvider = (props) => {
   const signup = async (enteredData) => {
     try {
       const response = await fetch(
-        "https://rise-blog-backend.onrender.com/api/signup",
+        "https://thoughtful-worm-tweed-jacket.cyclic.app/api/signup",
         {
           method: "POST",
           body: JSON.stringify(enteredData),
@@ -62,7 +62,7 @@ export const AuthContextProvider = (props) => {
   const login = async (enteredData) => {
     try {
       const response = await fetch(
-        "https://rise-blog-backend.onrender.com/api/login",
+        "https://thoughtful-worm-tweed-jacket.cyclic.app/api/login",
         {
           method: "POST",
           body: JSON.stringify(enteredData),
@@ -97,7 +97,7 @@ export const AuthContextProvider = (props) => {
   const logout = async () => {
     try {
       const response = await fetch(
-        "https://rise-blog-backend.onrender.com/api/logout",
+        "https://thoughtful-worm-tweed-jacket.cyclic.app/api/logout",
         {
           method: "POST",
           credentials: "include",

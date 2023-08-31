@@ -15,7 +15,7 @@ const Write = () => {
 
     try {
       const response = await fetch(
-        "https://rise-blog-backend.onrender.com/api/addArticles",
+        "https://thoughtful-worm-tweed-jacket.cyclic.app/api/addArticles",
         {
           method: "POST",
           body: formData,

@@ -3,7 +3,7 @@ module.exports = (app) => {
   app.use(
     ["/api*"],
     createProxyMiddleware({
-      target: "https://rise-blog-backend.onrender.com",
+      target: "https://thoughtful-worm-tweed-jacket.cyclic.app",
     })
   );
 };
