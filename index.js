@@ -22,7 +22,7 @@ const cloudinary = require("./utils/cloudinary");
 const upload = require("./utils/multer");
 
 const corsOptions = {
-  origin: "https://riseblog.onrender.com",
+  origin: "https://thoughtful-worm-tweed-jacket.cyclic.app",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   optionsSuccessStatus: 200,
   credentials: true,
