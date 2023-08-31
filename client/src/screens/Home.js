@@ -11,7 +11,7 @@ const Home = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        "https://rise-blog-backend.onrender.com/api/"
+        "https://thoughtful-worm-tweed-jacket.cyclic.app/api/"
       );
       if (response.status === 200) {
         const data = await response.json();
