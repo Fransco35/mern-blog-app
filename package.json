@@ -2,7 +2,7 @@
   "name": "riseblog",
   "version": "1.0.0",
   "description": "A blog application",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "server": "nodemon --quiet index.js",
     "client": "npm start --prefix client",
